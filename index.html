@@ -27,33 +27,56 @@
 <body class="bg-gray-900 text-gray-100">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg flex items-center justify-center font-bold text-xl">
                     V12
                 </div>
                 <span class="text-xl font-bold">V12 Browser</span>
             </div>
-            <div class="hidden md:flex gap-8">
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center gap-8">
                 <a href="#features" class="hover:text-teal-400 transition">Features</a>
                 <a href="#virt-protocol" class="hover:text-teal-400 transition">VIRT Protocol</a>
                 <a href="#parallel-internet" class="hover:text-teal-400 transition">Parallel Internet</a>
                 <a href="#developers" class="hover:text-teal-400 transition">For Developers</a>
                 <a href="#download" class="hover:text-teal-400 transition">Download</a>
+                <a href="#download" class="bg-teal-600 hover:bg-teal-700 px-6 py-2 rounded-lg font-medium transition">
+                    Download Now
+                </a>
             </div>
-            <a href="#download" class="bg-teal-600 hover:bg-teal-700 px-6 py-2 rounded-lg font-medium transition">
-                Download Now
-            </a>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-900/98 backdrop-blur-sm border-t border-gray-800">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#features" class="block py-3 text-lg hover:text-teal-400 transition" onclick="closeMobileMenu()">Features</a>
+                <a href="#virt-protocol" class="block py-3 text-lg hover:text-teal-400 transition" onclick="closeMobileMenu()">VIRT Protocol</a>
+                <a href="#parallel-internet" class="block py-3 text-lg hover:text-teal-400 transition" onclick="closeMobileMenu()">Parallel Internet</a>
+                <a href="#developers" class="block py-3 text-lg hover:text-teal-400 transition" onclick="closeMobileMenu()">For Developers</a>
+                <a href="#download" class="block py-3 text-lg hover:text-teal-400 transition" onclick="closeMobileMenu()">Download</a>
+                <a href="#download" class="bg-teal-600 hover:bg-teal-700 px-6 py-3 rounded-lg font-medium transition inline-block mt-4" onclick="closeMobileMenu()">
+                    Download Now
+                </a>
+            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-40 px-6 relative overflow-hidden">
+    <section class="pt-32 pb-40 px-4 md:px-6 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-br from-teal-900/20 via-cyan-900/20 to-blue-900/20 gradient-animate"></div>
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
                         The Developer's Walled Garden
                     </h1>
                     <p class="text-xl text-gray-300 mb-8 leading-relaxed">
@@ -843,12 +866,54 @@ Result: virt://my-awesome-project.vc</code></pre>
     </footer>
 
     <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMobileMenu() {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('hidden');
+            mobileMenuBtn.innerHTML = `
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            `;
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            mobileMenuBtn.innerHTML = `
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            `;
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
+                    // Close mobile menu if open
+                    closeMobileMenu();
                     target.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
